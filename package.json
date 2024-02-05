@@ -22,6 +22,7 @@
     "habra-auth": "^3.0.3",
     "history": "^4.7.2",
     "html-react-parser": "^1.2.4",
+    "http-server": "^14.1.1",
     "i18next": "^20.3.4",
     "i18next-browser-languagedetector": "^6.1.2",
     "i18next-http-backend": "^1.2.6",
@@ -57,7 +58,8 @@
     "workbox-build": "^6.1.1"
   },
   "scripts": {
-    "dev": "vite --host",
+    "start": "http-server ./dist",
+    "dev": "vite --host --port 3000",
     "build": "yarn clean && vite build",
     "preview": "vite preview",
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",

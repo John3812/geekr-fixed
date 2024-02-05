@@ -3,5 +3,5 @@ WORKDIR /app
 COPY . .
 RUN yarn install &&   \
     yarn run build
-EXPOSE 5000
-CMD yarn run dev
+EXPOSE 8080
+CMD yarn start
