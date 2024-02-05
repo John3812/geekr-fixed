@@ -176,13 +176,13 @@ const App: React.FC = () => {
             <div className={classes.app}>
               <ScrollRestoration />
               <UpdateNotification />
-              <RUVDSPromoNotification />
+              {/* <RUVDSPromoNotification /> */}
               <AppBar />
               <BottomBar />
               <AppRouter />
             </div>
           </div>
-          <RebrandingModal />
+          {/* <RebrandingModal /> */}
           <Analytics />
         </SnackbarProvider>
       </ErrorBoundary>

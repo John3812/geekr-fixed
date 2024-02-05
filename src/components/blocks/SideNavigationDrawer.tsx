@@ -364,7 +364,7 @@ const SideNavigationDrawer = () => {
           ))}
         </div>
         <div className={classes.bottomBlock}>
-          <RUVDSPromoBlock />
+          {/* <RUVDSPromoBlock /> */}
           <Divider className={classes.logoDivider} />
           <AboutButton />
         </div>
