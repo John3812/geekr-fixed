@@ -199,12 +199,15 @@ const DonateDialog: React.FC<{
 const AuthorCard: React.FC<{
   post: Post | null
 }> = ({ post }) => {
-  if (!post) return null
-
+  
   const classes = useStyles()
   const [isSubscribed, setSubscribed] = useState(false)
   const [isDonateDialogOpen, setDonateDialogOpen] = useState(false)
   const theme = useTheme()
+// [FIXED] Internal React error: Expected static flag was missing. Please notify the React team.
+  	if(!post)
+		return null
+
   const shouldShowDonateButton = Object.values(post.author.paymentDetails).some(
     (e) => !!e
   )

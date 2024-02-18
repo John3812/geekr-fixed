@@ -648,12 +648,20 @@ const ThemeSelectDialog = (props: ThemeSelectDialogProps) => {
 
   return (
     <Dialog
-      disableBackdropClick
+      //disableBackdropClick
       disableEscapeKeyDown
       maxWidth="xs"
-      onEntering={handleEntering}
+      //onEntering={handleEntering}
+	  TransitionProps={{
+		onEntering: handleEntering,
+	  }}
       aria-labelledby="theme-select-dialog-title"
       open={open}
+	  onClose={(event, reason) => {
+		if (reason !== 'backdropClick') {
+		  handleCancel();
+		}
+	  }}
       {...other}
     >
       <DialogTitle id="theme-select-dialog-title">Выбор темы</DialogTitle>

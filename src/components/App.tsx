@@ -33,9 +33,9 @@ import useGetDownvoteReasons from 'src/hooks/useGetDownvoteReasons'
 import { useEffect } from 'react'
 import { ErrorBoundary } from '@sentry/react'
 import ErrorPage from 'src/pages/Error'
-import RebrandingModal from 'src/components/modals/Rebranding'
-import RUVDSPromoNotification from './blocks/RUVDSPromo/Notification'
-import { Analytics } from '@vercel/analytics/react'
+//import RebrandingModal from 'src/components/modals/Rebranding'
+//import RUVDSPromoNotification from './blocks/RUVDSPromo/Notification'
+//import { Analytics } from '@vercel/analytics/react'
 
 interface StyleProps {
   theme: Theme
@@ -183,7 +183,7 @@ const App: React.FC = () => {
             </div>
           </div>
           {/* <RebrandingModal /> */}
-          <Analytics />
+          {/* <Analytics /> */}
         </SnackbarProvider>
       </ErrorBoundary>
     </ThemeProvider>

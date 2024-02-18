@@ -11,17 +11,17 @@ import updateLocalePlugin from 'dayjs/plugin/updateLocale'
 import 'dayjs/locale/ru'
 import 'src/config/i18n'
 import { BrowserRouter as Router } from 'react-router-dom'
-import 'react-photoswipe/dist/photoswipe.css'
 import { SENTRY_DSN } from 'src/config/constants'
 import * as userSettingsUtils from 'src/utils/userSettings'
 import * as Sentry from '@sentry/react'
-import { Integrations } from '@sentry/tracing'
+import { BrowserTracing } from '@sentry/browser'
+//import { Integrations } from '@sentry/tracing'
 
 const userSettings = userSettingsUtils.get()
 
 Sentry.init({
   dsn: SENTRY_DSN,
-  integrations: [new Integrations.BrowserTracing()],
+  integrations: [new BrowserTracing()],
   tracesSampleRate: 0,
   environment: import.meta.env.NODE_ENV,
   enabled: import.meta.env.NODE_ENV === 'production',

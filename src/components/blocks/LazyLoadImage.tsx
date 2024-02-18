@@ -1,7 +1,4 @@
-import React, { useState, useRef, MutableRefObject } from 'react'
-// TODO: fix types
-//@ts-expect-error
-import ProgressiveImage from 'react-lazy-progressive-image'
+import React, { useState, useRef } from 'react'
 import {
   CircularProgress,
   Fade,
@@ -9,9 +6,9 @@ import {
   Portal,
   Typography,
 } from '@material-ui/core'
-import { PhotoSwipe } from 'react-photoswipe'
-import { POST_ITEM_VISIBILITY_THRESHOLD } from 'src/config/constants'
+//import { POST_ITEM_VISIBILITY_THRESHOLD } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
+import { ImageSlider } from './ImageSlider'
 
 const useStyles = makeStyles((theme) => ({
   imageContainer: {
@@ -200,96 +197,18 @@ const ImageUnmemoized = React.forwardRef<HTMLImageElement, ImageProps>(
   }
 )
 const Image = React.memo(ImageUnmemoized)
-
+/* [FIXME] */
 const LazyLoadImage: React.FC<LazyLoadImageProps> = (props) => {
   const shouldReplaceImagesWithPlaceholder = useSelector(
     (store) => store.settings.readerSettings.replaceImagesWithPlaceholder
   )
-  const [isOpen, setOpen] = useState(false)
   const [shouldShowImage, setShouldShowImage] = useState(
     !shouldReplaceImagesWithPlaceholder
   )
-  const imageRef = useRef<HTMLImageElement>(null)
   const { style, alt, className, disableZoom, align, placeholderSrc } = props
-  const showByDefault = !!placeholderSrc
-  // Set image dimensions after it is done loading
-  // PhotoSwipe requires image dimensions to be set before it is opened,
-  // so we set them as soon as the image (in FormattedText, probably) is loaded.
-  // User cannot open PhotoSwipe before image was loaded.
-  const items: MutableRefObject<PhotoSwipe.Item[]> = React.useRef([
-    {
-      src: props.src,
-      w: 1080,
-      h: 1920,
-    },
-  ])
-  const pswpOptions: PhotoSwipe.UIFramework = {
-    showHideOpacity: false,
-    bgOpacity: 0.8,
-    fullscreenEl: false,
-    zoomEl: false,
-    shareEl: false,
-    counterEl: false,
-    arrowEl: false,
-    captionEl: false,
-    tapToClose: true,
-    pinchToClose: false,
-    maxSpreadZoom: 4,
-    history: false,
-  }
-
-  const onClick = () => {
-    if (disableZoom || !imageRef?.current) return
-    const windowWidth = window.innerWidth - 32
-    const n = windowWidth / imageRef?.current?.clientWidth
-    items.current = [
-      {
-        src: props.src,
-        w: windowWidth,
-        h: imageRef?.current?.clientHeight * n,
-      },
-    ]
-    setOpen(true)
-  }
 
   return shouldShowImage ? (
-    <>
-      <ProgressiveImage
-        placeholder={placeholderSrc}
-        src={props.src}
-        visibilitySensorProps={{
-          partialVisibility: true,
-          offset: {
-            top: showByDefault ? -Infinity : POST_ITEM_VISIBILITY_THRESHOLD,
-            bottom: showByDefault ? -Infinity : POST_ITEM_VISIBILITY_THRESHOLD,
-          },
-        }}
-      >
-        {(src: string, loading: boolean, isVisible: boolean) => (
-          <Image
-            ref={imageRef}
-            src={src}
-            onClick={onClick}
-            loading={loading}
-            isVisible={isVisible}
-            style={style}
-            alt={alt}
-            align={align}
-            className={className}
-          />
-        )}
-      </ProgressiveImage>
-      {isOpen && !disableZoom && imageRef.current && (
-        <Portal container={document.body}>
-          <PhotoSwipe
-            options={pswpOptions}
-            isOpen={isOpen}
-            items={items.current}
-            onClose={() => setOpen(false)}
-          />
-        </Portal>
-      )}
-    </>
+	<ImageSlider src={ props.src } expandable />
   ) : (
     <ImagePlaceholder setShouldShowImage={setShouldShowImage} style={style} />
   )

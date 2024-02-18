@@ -17,7 +17,8 @@
     "jsx": "react-jsx",
     "rootDir": "./src",
     "baseUrl": ".",
-    "types": ["vite/client"]
+    "types": ["node", "vite/client"],
+	"typeRoots": ["./node_modules", "./node_modules/@types/", "./types"],
   },
   "exclude": ["node_modules", "dist"],
   "include": ["src"],

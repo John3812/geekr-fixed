@@ -254,7 +254,7 @@ const useStyles = makeStyles<
     textDecoration: 'none',
   },
 }))
-
+/* [FIXME] */
 const FormattedText: React.FC<{
   children: string
   oldHabrFormat?: boolean
@@ -281,6 +281,7 @@ const FormattedText: React.FC<{
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-expect-error
     replace: ({ name, children, attribs }): void | React.ReactElement => {
+		
       if (name === '&nbsp;') {
         return <> </>
       }
@@ -325,7 +326,7 @@ const FormattedText: React.FC<{
           width: attribs['data-width'] || attribs.width,
           height: attribs['data-height'] || attribs.height,
         }
-
+	
         return (
           <LazyLoadImage
             disableZoom={disableImageZoom}

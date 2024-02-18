@@ -1,7 +1,9 @@
 FROM node:18.19.0-alpine
-WORKDIR /app
-COPY . .
-RUN yarn install &&   \
-    yarn run build
-EXPOSE 8080
-CMD yarn start
+WORKDIR /usr/src/app
+COPY . ./
+
+RUN npm install --legacy-peer-deps && \
+	npm run build
+
+EXPOSE 10000
+CMD "npm" "start"

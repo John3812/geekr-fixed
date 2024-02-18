@@ -304,7 +304,8 @@ export const PostItem = ({
   })
 
   /** Do not show megaproject articles (not supported) */
-  if (post.postType === 'megaproject') return null
+  if(post.postType === 'megaproject')
+  	return null
 
   /**
    * Post with postType 'voice' needs just a title to be shown.
@@ -313,6 +314,10 @@ export const PostItem = ({
   if (post.postType === 'voice') {
     return (
       <Paper elevation={0} className={classes.paper} style={style}>
+		{/* [FIXME]
+			"Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>."
+			
+		  */}
         <FormattedText
           className={[
             classes.postLink,
@@ -558,7 +563,7 @@ export const PostItem = ({
                 {...linkProps}
                 className={classes.imageHolder}
                 to={postLink}
-              >
+              > 
                 <LazyLoadImage
                   src={postFirstImage}
                   alt={'Post header image'}

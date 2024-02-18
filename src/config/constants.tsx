@@ -280,16 +280,16 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   customThemes: [],
   hiddenAuthors: [],
   hiddenCompanies: [],
-  preferredDarkTheme: 'dark',
+  preferredDarkTheme: 'oled',
   preferredLightTheme: 'light',
-  autoChangeTheme: false,
+  autoChangeTheme: true,
   cookiesPreferences: {
     disableCookies: false,
   },
   readerSettings: {
-    fontFamily: 'Roboto',
-    fontSize: 16,
-    changeLinks: false,
+    fontFamily: 'Segoe UI',
+    fontSize: 15,
+    changeLinks: true,
     replaceImagesWithPlaceholder: false,
   },
   interfaceFeed: {

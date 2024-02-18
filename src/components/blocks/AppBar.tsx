@@ -16,7 +16,7 @@ import {
 import { Icon28SettingsOutline } from '@vkontakte/icons'
 import { Icon24UserOutline } from '@vkontakte/icons'
 import WifiOffRoundedIcon from '@material-ui/icons/WifiOffRounded'
-import { Offline } from 'react-detect-offline'
+//import { Offline } from 'react-detect-offline'
 import { useRoute, useSelector } from 'src/hooks'
 import { FetchingState } from 'src/interfaces'
 import {
@@ -164,11 +164,15 @@ const AppBarComponent = () => {
   const openUserMenu = () => setUserMenuOpen(true)
 
   useEffect(() => {
-    if (appHasDrawer && isUserMenuOpen) setUserMenuOpen(false)
+
+    if (appHasDrawer && isUserMenuOpen)
+		setUserMenuOpen(false)
+
   }, [shouldChangeColors, isHidden, route, appHasDrawer])
 
   // Do not render the AppBar if it is hidden by the route
-  if (isHidden) return null
+  if (isHidden)
+  	return null
 
   return (
     <>
@@ -183,7 +187,7 @@ const AppBarComponent = () => {
               >
                 geekr.
               </Typography>
-              <Offline
+              {/* <Offline
                 polling={{
                   enabled: true,
                   interval: 10000,
@@ -192,7 +196,7 @@ const AppBarComponent = () => {
                 }}
               >
                 <WifiOffRoundedIcon className={classes.offline} />
-              </Offline>
+              </Offline> */}
             </div>
             <IconButton onClick={goSettings}>
               <Icon28SettingsOutline width={24} height={24} />

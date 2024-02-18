@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import OutsidePage from 'src/components/blocks/OutsidePage'
-import { fade, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { MIN_WIDTH, READER_FONT_FAMILIES } from 'src/config/constants'
 import { useSelector } from 'src/hooks'
 import { useDispatch } from 'react-redux'
@@ -251,7 +251,7 @@ const Reader = () => {
                 </Typography>{' '}
                 на{' '}
                 <Typography component="span" color="primary">
-                  geekr.vercel.app
+				  { window.location.hostname }
                 </Typography>
               </>
             }
