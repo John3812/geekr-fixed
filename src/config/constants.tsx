@@ -40,6 +40,11 @@ export const APP_BAR_HEIGHT = 48
 export const DRAWER_WIDTH = 296
 export const THREAD_LEVEL = 7
 
+export const POST_IMAGE_HEIGHT_MAX = 430
+export const POST_IMAGE_MARGIN_BOTTOM = 30
+export const MAIN_BLOCK_MARGIN_LEFT = (-10)
+export const MAIN_BLOCK_MARGIN_RIGHT = 20
+
 /** Local Storage keys */
 export const USER_SETTINGS_KEY = 'habra_USER_SETTINGS'
 export const COLLAPSED_COMMENTS_IDS_KEY = 'habra_COLLAPSED_COMMENTS_IDS'
@@ -280,7 +285,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   customThemes: [],
   hiddenAuthors: [],
   hiddenCompanies: [],
-  preferredDarkTheme: 'oled',
+  preferredDarkTheme: 'dark',
   preferredLightTheme: 'light',
   autoChangeTheme: true,
   cookiesPreferences: {
@@ -288,7 +293,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   },
   readerSettings: {
     fontFamily: 'Segoe UI',
-    fontSize: 15,
+    fontSize: 16,
     changeLinks: true,
     replaceImagesWithPlaceholder: false,
   },

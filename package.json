@@ -6,12 +6,12 @@
   "homepage": "/",
   "scripts": {
     "build": "npm run clean && vite build --mode 'production'",
-	"start": "serve -s dist -l tcp://0.0.0.0:10000",
-	"start:debug": "serve -s dist --debug -l tcp://0.0.0.0:10000",
+    "start": "serve -s dist -l tcp://0.0.0.0:10000",
+    "start:debug": "serve -s dist --debug -l tcp://0.0.0.0:10000",
     "start:test": "http-server -a 0.0.0.0 -p 10000 dist",
     "dev": "vite --host --port 3000",
     "preview": "vite preview --host --port 3000",
-	"clean": "npx --yes rimraf dist"
+    "clean": "npx --yes rimraf dist"
   },
   "browserslist": {
     "production": [

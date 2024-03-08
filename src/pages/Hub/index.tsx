@@ -8,6 +8,8 @@ import ErrorComponent from 'src/components/blocks/Error'
 import { FetchingState } from 'src/interfaces'
 import Profile from './pages/Profile'
 import ProfileSkeleton from 'src/components/skeletons/HubProfile'
+import Sidebar from 'src/pages/Home/Sidebar'
+import MainBlock from 'src/components/blocks/MainBlock'
 
 export interface HubParams {
   alias: string
@@ -28,21 +30,26 @@ const Hub = () => {
   }, [alias, profile, dispatch])
 
   return (
-    <OutsidePage
-      headerText={profile ? profile.titleHtml : undefined}
-      shrinkedHeaderText={
-        profileFetchingState === FetchingState.Fetched
-          ? profile?.titleHtml
-          : alias
-      }
-      hidePositionBar
-    >
-      {profileFetchingState === FetchingState.Error && (
-        <ErrorComponent message={profileFetchError} />
-      )}
-      {profileFetchingState === FetchingState.Fetched && <Profile />}
-      {profileFetchingState === FetchingState.Fetching && <ProfileSkeleton />}
-    </OutsidePage>
+	<>
+	<MainBlock>
+		<OutsidePage
+		headerText={profile ? profile.titleHtml : undefined}
+		shrinkedHeaderText={
+			profileFetchingState === FetchingState.Fetched
+			? profile?.titleHtml
+			: alias
+		}
+		hidePositionBar
+		>
+		{profileFetchingState === FetchingState.Error && (
+			<ErrorComponent message={profileFetchError} />
+		)}
+		{profileFetchingState === FetchingState.Fetched && <Profile />}
+		{profileFetchingState === FetchingState.Fetching && <ProfileSkeleton />}
+		</OutsidePage>
+	</MainBlock>
+	<Sidebar />
+	</>
   )
 }
 

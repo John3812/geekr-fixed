@@ -201,7 +201,7 @@ interface Props {
 }
 
 type ShrinkedContentProps = {
-  isShrinked: boolean
+  isShrinked: boolean | undefined
   shrinkedHeaderText?: string
 }
 
@@ -221,15 +221,18 @@ const ShrinkedContentUnmemoized: React.FC<ShrinkedContentProps> = ({
 const ShrinkedContent = React.memo(ShrinkedContentUnmemoized)
 
 const backLinkFunction = (history: History<unknown>) => {
-  const goHome = () => history.push(getCachedMode().to + 'p/1')
-  if (history.length > 1) {
+  const goHome = () => history.push(getCachedMode().to)
+  
+  try {
     history.goBack()
-  } else goHome()
+  } catch (e) {
+	goHome()
+  }
 }
 
 type UnshrinkedContentProps = {
   onBackClick?: (prop: typeof backLinkFunction) => void
-  isShrinked: boolean
+  isShrinked: boolean | undefined
   headerText?: string
   headerTextUpdated: boolean
 }
@@ -269,7 +272,7 @@ const UnshrinkedContentUnmemoized: React.FC<UnshrinkedContentProps> = ({
 const UnshrinkedContent = React.memo(UnshrinkedContentUnmemoized)
 
 const ToolbarIconsWrapperUnmemoized: React.FC<
-  React.PropsWithChildren<{ isShrinked: boolean }>
+  React.PropsWithChildren<{ isShrinked: boolean | undefined}>
 > = ({ isShrinked, children }) => {
   const classes = useAppBarStyles({})
   return (

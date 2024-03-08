@@ -19,8 +19,11 @@ import {
   MIN_WIDTH,
   POST_IMAGE_HEIGHT,
   POST_ITEM_VISIBILITY_THRESHOLD,
+  POST_IMAGE_HEIGHT_MAX,
+  POST_IMAGE_MARGIN_BOTTOM,
+
 } from 'src/config/constants'
-import LazyLoadImage from './LazyLoadImage'
+//import LazyLoadImage from './LazyLoadImage'
 import { useSelector } from 'src/hooks'
 import RightIcon from '@material-ui/icons/ChevronRightRounded'
 import { Button, Chip, alpha, Theme } from '@material-ui/core'
@@ -95,37 +98,38 @@ const useStyles = makeStyles<
   padding: {
     padding: theme.spacing(2),
   },
-  imageHolder: {
-    maxWidth: '100%',
-    width: '100%',
-    display: 'flex',
-    height: ({ hasImage }) => (hasImage ? POST_IMAGE_HEIGHT : '100%'),
-    marginBottom: ({ hasImage }) => (hasImage ? theme.spacing(2) : 0),
-  },
-  image: {
-    maxWidth: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    width: '100vw',
-    display: 'flex',
-    background: theme.palette.action.hover,
-  },
+//   imageHolder: {
+//     //maxWidth: '100%',
+// 	maxHeight: 430,
+//     //width: '100%',
+//     display: 'flex',
+//     height: ({ hasImage }) => (hasImage ? POST_IMAGE_HEIGHT : '100%'),
+//     marginBottom: ({ hasImage }) => (hasImage ? theme.spacing(2) : 0),
+// 	justifyContent: 'center',
+// 	alignItems: 'center',
+//   },
+//   image: {
+//     maxWidth: '100%',
+// 	maxHeight: '100%',
+//     //height: '100%',
+//     objectFit: 'contain',
+//     //width: '100vw',
+//     //display: 'flex',
+//     //background: theme.palette.action.hover,
+//   },
   leadImageWrapper: {
-    marginBottom: theme.spacing(2),
-    maxHeight: 500,
-    objectFit: 'cover',
-    paddingBottom: '56.4103%',
-    position: 'relative',
-    width: '100%',
+	maxHeight: POST_IMAGE_HEIGHT_MAX,
+	overflow: 'hidden',
+	display: 'flex',
+	justifyContent: 'center',
+	alignItems: 'center',
+	borderRadius: 4,
+	marginBottom: POST_IMAGE_MARGIN_BOTTOM,
   },
   leadImage: {
     maxWidth: '100%',
-    height: '100%',
-    borderRadius: 4,
-    position: 'absolute',
-    objectFit: 'cover',
-    width: '100%',
-    objectPosition: '0% 0%',
+	maxHeight: '100%',
+	objectFit: 'contain',
   },
   leadButton: {
     textTransform: 'none',
@@ -266,7 +270,7 @@ export const PostItem = ({
   hideImage: hideImageProp = false,
   setPostItemSize,
   getPostItemSize = () => DEFAULT_POST_ITEM_HEIGHT,
-}: {
+} : {
   post?: Post
   style?: Record<string, unknown>
   hideImage?: boolean
@@ -558,7 +562,7 @@ export const PostItem = ({
                 {ts}
               </Typography>
             </LinkToOutsidePage>
-            {shouldShowPostImage && (
+            {/* {shouldShowPostImage && (
               <LinkToOutsidePage
                 {...linkProps}
                 className={classes.imageHolder}
@@ -566,7 +570,7 @@ export const PostItem = ({
               > 
                 <LazyLoadImage
                   src={postFirstImage}
-                  alt={'Post header image'}
+                  alt={'Post header image 1'}
                   className={classes.image}
                   style={{
                     width: '100%',
@@ -575,7 +579,7 @@ export const PostItem = ({
                   disableZoom
                 />
               </LinkToOutsidePage>
-            )}
+            )} */}
 
             <LinkToOutsidePage
               className={[classes.postLink, classes.noDeco].join(' ')}
@@ -620,7 +624,7 @@ export const PostItem = ({
 
             {isExtended && (
               <div className={classes.leadText}>
-                {!hasImagesInLeadText && postFirstImage && (
+                {/* {!hasImagesInLeadText && */ postFirstImage && ( 
                   <div className={classes.leadImageWrapper}>
                     <img
                       src={postFirstImage}
@@ -629,7 +633,7 @@ export const PostItem = ({
                     />
                   </div>
                 )}
-                <FormattedText disableImageZoom>
+                <FormattedText disableImage>
                   {leadData.textHtml}
                 </FormattedText>
                 <LinkToOutsidePage

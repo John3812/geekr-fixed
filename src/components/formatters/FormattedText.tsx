@@ -261,12 +261,14 @@ const FormattedText: React.FC<{
   className?: string
   inverseColors?: boolean
   disableImageZoom?: boolean
+  disableImage?: boolean
 }> = ({
   children: componentChildren,
   className = '',
   oldHabrFormat = false,
   inverseColors = false,
   disableImageZoom = false,
+  disableImage = false,
   ...props
 }) => {
   const readerSettings = useSelector((store) => store.settings.readerSettings)
@@ -326,8 +328,9 @@ const FormattedText: React.FC<{
           width: attribs['data-width'] || attribs.width,
           height: attribs['data-height'] || attribs.height,
         }
-	
+		
         return (
+		  disableImage ? <></> : 
           <LazyLoadImage
             disableZoom={disableImageZoom}
             placeholderSrc={attribs.src}

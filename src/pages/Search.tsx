@@ -17,6 +17,8 @@ import useQuery from '../hooks/useQuery'
 import getPostFirstImage from 'src/utils/getPostFirstImage'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'src/hooks'
+import Sidebar from 'src/pages/Home/Sidebar'
+import MainBlock from 'src/components/blocks/MainBlock'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +36,8 @@ const useSearchStyles = makeStyles((theme) => ({
     alignItems: 'center',
     display: 'flex',
     margin: theme.spacing(2),
+	marginLeft: 'auto',
+	backgroundColor: theme.palette.background.default,
   },
   searchButton: {
     borderTopLeftRadius: 0,
@@ -241,11 +245,14 @@ const Search = () => {
   const query = searchParams.get('q') || ''
 
   return (
-    <div className={classes.root}>
-      <SearchInput q={query} />
-      {query && <SearchResultsScreen q={query} />}
-      {!query && <SvgScreen />}
-    </div>
+	<>
+	  <MainBlock>
+		<SearchInput q={query} />
+		{query && <SearchResultsScreen q={query} />}
+		{!query && <SvgScreen />}
+	  </MainBlock>
+	  <Sidebar/>
+	</>
   )
 }
 
