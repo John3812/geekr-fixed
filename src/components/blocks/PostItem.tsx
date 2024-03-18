@@ -44,9 +44,7 @@ import useIsPWA from 'src/hooks/useIsPWA'
 const NBSP_CHAR = ' '
 const WHITESPACE_CHAR = ' '
 const ld = (theme: Theme) => (isDarkTheme(theme) ? darken : lighten)
-const useStyles = makeStyles<
-  Theme,
-  {
+const useStyles = makeStyles<Theme, {
     hasImage: boolean
     isExtended: boolean
   }
@@ -323,13 +321,13 @@ export const PostItem = ({
 			
 		  */}
         <FormattedText
-          className={[
+          className ={[
             classes.postLink,
             classes.noDeco,
             classes.postTypeVoice,
           ].join(' ')}
         >
-          {leadData?.textHtml || ''}
+          { leadData?.textHtml || '' }
         </FormattedText>
       </Paper>
     )
@@ -388,42 +386,46 @@ export const PostItem = ({
   const bottomRow: BottomRowItemType[] = [
     {
       icon: <ThumbsUpDownIcon className={classes.postBottomRowItemIcon} />,
-      text: <>{score}</>,
+      text: <>{ score }</>,
       coloredText: true,
       number: unformattedScore,
     },
     {
       icon: <VisibilityIcon className={classes.postBottomRowItemIcon} />,
-      text: <>{reads}</>,
+      text: <>{ reads }</>,
     },
     {
       icon: isFetchingBookmarkResponse ? (
         <CircularProgress
-          className={classes.postBottomRowItemIcon}
-          style={{ width: 16, height: 16 }}
-          thickness={5}
+          className ={ classes.postBottomRowItemIcon }
+          style ={{ width: 16, height: 16 }}
+          thickness ={ 5 }
         />
       ) : (
         <BookmarkIcon
-          className={classes.postBottomRowItemIcon}
-          color={isBookmarked ? 'primary' : 'inherit'}
+          className ={ classes.postBottomRowItemIcon }
+          color ={ isBookmarked ? 'primary' : 'inherit' }
         />
       ),
       text: <>{favorites}</>,
       isActive: isBookmarked,
       action: async () => {
         if (authData) {
+
           setIsFetchingBookmarkResponse(true)
+
           const response = await setArticleBookmark({
             mode: isBookmarked ? 'remove' : 'add',
             authData: authorizedRequestData || undefined,
             id: post.id,
           })
+
           if (response.ok) {
             setBookmarkState((prev) => !prev)
             setIsFetchingBookmarkResponse(false)
           }
-        } else {
+        }
+        else {
           enqueueSnackbar('Нужна авторизация', {
             variant: 'error',
             autoHideDuration: 4000,
@@ -432,15 +434,19 @@ export const PostItem = ({
       },
     },
     {
-      icon: <ChatBubbleIcon className={classes.postBottomRowItemIcon} />,
+      icon: <ChatBubbleIcon className ={ classes.postBottomRowItemIcon } />,
       text: (
         <>
-          {comments}
-          {unreadCommentsCount && unreadCommentsCount !== 0 ? (
-            <span className={classes.unreadCommentsCount}>
-              +{unreadCommentsCount}
-            </span>
-          ) : null}
+          { comments }
+          { 
+            unreadCommentsCount && unreadCommentsCount !== 0 
+            ? (
+              <span className={classes.unreadCommentsCount}>
+                +{ unreadCommentsCount }
+              </span>
+            )
+            : null
+          }
         </>
       ),
       action: () => {
@@ -460,21 +466,21 @@ export const PostItem = ({
     return (
       <LinkToOutsidePage
         {...linkProps}
-        to={postLink}
-        style={{ textDecoration: 'none' }}
+        to ={ postLink }
+        style ={{ textDecoration: 'none' }}
       >
         <Paper
-          style={{ padding: 16, display: 'flex', flexDirection: 'row' }}
-          elevation={0}
-          className={classes.paper}
+          style ={{ padding: 16, display: 'flex', flexDirection: 'row' }}
+          elevation ={ 0 }
+          className ={ classes.paper }
         >
-          <div className={classes.trollWrapper}>
-            <Typography className={classes.trollText}>
-              Тут был тролль / @{alias}
+          <div className ={ classes.trollWrapper }>
+            <Typography className ={ classes.trollText }>
+              Тут был тролль / @{ alias }
             </Typography>
-            <Typography className={classes.trollTextTitle}>{title}</Typography>
+            <Typography className ={ classes.trollTextTitle}>{ title }</Typography>
           </div>
-          <div className={classes.trollLink}>
+          <div className ={ classes.trollLink }>
             <RightIcon />
           </div>
         </Paper>
@@ -485,35 +491,37 @@ export const PostItem = ({
     const itemIcon = item.icon
     return (
       <Grid
-        xs={3}
+        xs ={ 3 }
         item
-        onClick={item.action}
-        style={{
+        onClick ={ item.action }
+        style ={{
           cursor: item.action ? 'pointer' : 'inherit',
         }}
-        className={classes.postBottomRowItem}
+        className ={ classes.postBottomRowItem }
       >
         {item.coloredText ? (
           <GreenRedNumber
-            number={item.number || 0}
-            wrapperProps={{ style: { display: 'flex', alignItems: 'center' } }}
+            number ={ item.number || 0 }
+            wrapperProps ={{ 
+              style: { display: 'flex', alignItems: 'center' } 
+            }}
           >
             <>
               {itemIcon}
               <Typography className={classes.postBottomRowItemText}>
-                {(item.number || 0) > 0 ? '+' : ''}
-                {item.text}
+                { (item.number || 0) > 0 ? '+' : '' }
+                { item.text }
               </Typography>
             </>
           </GreenRedNumber>
         ) : (
           <>
-            {itemIcon}
+            { itemIcon }
             <Typography
-              className={classes.postBottomRowItemText}
-              color={item.isActive ? 'primary' : 'initial'}
+              className ={ classes.postBottomRowItemText }
+              color ={ item.isActive ? 'primary' : 'initial' }
             >
-              {item.text}
+              { item.text }
             </Typography>
           </>
         )}
@@ -523,43 +531,44 @@ export const PostItem = ({
   const BottomRowItem = React.memo(BottomRowItemUnmemoized)
 
   useEffect(() => {
-    if (setPostItemSize && isRendered && rootRef.current) {
+    if(setPostItemSize && isRendered && rootRef.current) {
       setPostItemSize(post.id, rootRef.current.getBoundingClientRect().height)
     }
+
   }, [isRendered])
 
   return (
     <VisibilitySensor
       partialVisibility
-      offset={{
+      offset ={{
         top: POST_ITEM_VISIBILITY_THRESHOLD,
         bottom: POST_ITEM_VISIBILITY_THRESHOLD,
       }}
-      active={!isRendered}
-      onChange={(newIsVisible: boolean) => setIsRendered(newIsVisible)}
+      active ={ !isRendered }
+      onChange ={ (newIsVisible: boolean) => setIsRendered(newIsVisible) }
     >
       {({ isVisible }: { isVisible: boolean }) =>
         isVisible ? (
           <Paper
-            ref={rootRef}
-            elevation={0}
-            className={classes.paper}
-            style={style}
+            ref ={ rootRef }
+            elevation ={ 0 }
+            className ={ classes.paper }
+            style ={ style }
           >
             <LinkToOutsidePage
-              to={'/user/' + alias}
-              className={classes.avatarContainer}
+              to ={ '/user/' + alias }
+              className ={ classes.avatarContainer }
             >
               <UserAvatar
-                src={avatarUrl}
-                alias={alias}
-                className={classes.postAvatar}
+                src ={ avatarUrl }
+                alias ={ alias }
+                className ={ classes.postAvatar }
               />
-              <Typography className={classes.postAuthor} variant="caption">
-                {alias}
+              <Typography className ={ classes.postAuthor } variant="caption">
+                { alias }
               </Typography>
-              <Typography className={classes.postTs} variant="caption">
-                {ts}
+              <Typography className ={ classes.postTs } variant="caption">
+                { ts }
               </Typography>
             </LinkToOutsidePage>
             {/* {shouldShowPostImage && (
@@ -582,23 +591,23 @@ export const PostItem = ({
             )} */}
 
             <LinkToOutsidePage
-              className={[classes.postLink, classes.noDeco].join(' ')}
-              to={postLink}
+              className ={ [classes.postLink, classes.noDeco].join(' ') }
+              to ={ postLink }
               {...linkProps}
             >
-              {title}
+              { title }
             </LinkToOutsidePage>
 
             {/** Post hubs */}
             {isExtended && (
-              <div className={classes.hubs}>
+              <div className ={ classes.hubs }>
                 {post.hubs.map((hub, i) => (
-                  <span key={i} className={classes.hubWrapper}>
+                  <span key ={ i } className ={ classes.hubWrapper }>
                     <LinkToOutsidePage
-                      className={classes.hubLink}
-                      to={'/hub/' + hub.alias + '/p/1'}
+                      className ={ classes.hubLink }
+                      to ={ '/hub/' + hub.alias + '/p/1' }
                     >
-                      {hub.title}
+                      { hub.title }
                     </LinkToOutsidePage>
                   </span>
                 ))}
@@ -606,47 +615,54 @@ export const PostItem = ({
             )}
 
             {/** Post labels */}
-            <div className={classes.labelsContainer}>
+            <div className ={ classes.labelsContainer }>
               {post.postLabels.map(
                 (e, i) =>
                   POST_LABELS[e.type] && (
                     <Chip
-                      label={POST_LABELS[e.type]?.text}
-                      variant="outlined"
-                      color="primary"
-                      size="small"
-                      key={i}
-                      style={{ marginRight: 8, marginTop: 8 }}
+                      label ={ POST_LABELS[e.type]?.text }
+                      variant ="outlined"
+                      color ="primary"
+                      size ="small"
+                      key ={ i }
+                      style ={{ marginRight: 8, marginTop: 8 }}
                     />
                   )
               )}
             </div>
 
             {isExtended && (
-              <div className={classes.leadText}>
+              <div className ={ classes.leadText }>
                 {/* {!hasImagesInLeadText && */ postFirstImage && ( 
-                  <div className={classes.leadImageWrapper}>
+                  <div className ={ classes.leadImageWrapper }>
                     <img
-                      src={postFirstImage}
-                      alt={'Post header image'}
-                      className={classes.leadImage}
+                      src ={ postFirstImage }
+                      alt ={ 'Post header image' }
+                      className ={ classes.leadImage }
                     />
                   </div>
                 )}
-                <FormattedText disableImage>
-                  {leadData.textHtml}
+                <FormattedText filter ={{
+                  removeImages: true, 
+                  cleanBeforeHtml: true,
+                  limitParagraphs: 2,
+                  removeEmptyTags: true,
+                  limitBR: 2,
+                  }}
+                >
+                  { leadData.textHtml }
                 </FormattedText>
                 <LinkToOutsidePage
                   {...linkProps}
-                  to={postLink}
-                  className={classes.link}
+                  to ={ postLink }
+                  className ={ classes.link }
                 >
                   <Button
-                    color="primary"
-                    className={classes.leadButton}
-                    variant={'outlined'}
+                    color ="primary"
+                    className ={ classes.leadButton }
+                    variant ={ 'outlined' }
                   >
-                    {parse(leadData.buttonTextHtml || 'Читать далее')}
+                    { parse(leadData.buttonTextHtml || 'Читать далее') }
                   </Button>
                 </LinkToOutsidePage>
               </div>
@@ -654,12 +670,12 @@ export const PostItem = ({
 
             <div className={classes.postBottomRow}>
               {bottomRow.map((e, i) => (
-                <BottomRowItem item={e} key={i} />
+                <BottomRowItem item ={ e } key ={ i } />
               ))}
             </div>
           </Paper>
         ) : (
-          <div style={placeholderStyles} className={classes.placeholder} />
+          <div style ={ placeholderStyles } className ={ classes.placeholder } />
         )
       }
     </VisibilitySensor>

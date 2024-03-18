@@ -254,72 +254,106 @@ const useStyles = makeStyles<
     textDecoration: 'none',
   },
 }))
-/* [FIXME] */
+
 const FormattedText: React.FC<{
   children: string
   oldHabrFormat?: boolean
   className?: string
   inverseColors?: boolean
   disableImageZoom?: boolean
-  disableImage?: boolean
+  filter?: {
+    cleanBeforeHtml?: boolean,  // Remove any whitespace and <br> characters before start of main HTML text.
+    removeImages?: boolean,     // Remove all <img> tags.
+    removeEmptyTags?: boolean,  // Recursively remove all empty (without content) paired tags in HTML.
+    limitParagraphs?: number,   // Max number of paragraphs.
+    limitBR?: number,           // Max number of continuous tags <br> sequences.
+  },
 }> = ({
-  children: componentChildren,
+  children: html,
   className = '',
   oldHabrFormat = false,
   inverseColors = false,
   disableImageZoom = false,
-  disableImage = false,
+  filter,
   ...props
 }) => {
   const readerSettings = useSelector((store) => store.settings.readerSettings)
   const classes = useStyles({ oldHabrFormat, readerSettings, inverseColors })
-  const [iframeHeights, setIframeHeights] = React.useState<
-    Record<string, number>
-  >({})
+  const [iframeHeights, setIframeHeights] = React.useState<Record<string, number>>({})
   const shouldChangeLinks = useSelector(
     (store) => store.settings.readerSettings.changeLinks
   )
+  let countBR =0; // Number of sequential line breaks.
+  let countPrgph =0; // Number of paragraphs
   const options: HTMLReactParserOptions = {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-expect-error
     replace: ({ name, children, attribs }): void | React.ReactElement => {
-		
-      if (name === '&nbsp;') {
+
+      if(filter) {
+        // paragraph control
+        if(name === 'br') {
+          // ++<br> counter and check for paragraphs delimiter condition - 1(one) <br>
+          if(++countBR === 1) 
+            countPrgph +=1; // ++paragraphs counter
+        }
+        else {
+
+          countBR =0; // reset <br> counter
+
+          if(name === 'p' && children.length)
+              ++countPrgph; // ++paragraphs counter
+        }
+        // remove everything outside the allowed number of paragraphs
+        if((filter.limitParagraphs !== undefined) && (countPrgph > filter.limitParagraphs))
+          return <></> // remove any element
+
+        // keep 'as is'
+      }
+
+      if(name === '&nbsp;') {
         return <> </>
       }
-      if (name === 'pre') {
-        const firstChild = children[0]
-        const language = firstChild.attribs?.class || null
+
+      if(name === 'pre') {
+        const firstChild = children[0];
+        const language = firstChild.attribs?.class || null;
         const data = firstChild.children
           ? firstChild.children[0].data
-          : firstChild?.data
+          : firstChild?.data;
 
         return (
           <SyntaxHighlighter
-            style={monokaiStyle}
-            language={language}
-            className={classes.syntaxHighlighter}
+            style = { monokaiStyle }
+            language = { language }
+            className = { classes.syntaxHighlighter }
           >
-            {data}
+            { data }
           </SyntaxHighlighter>
         )
       }
-      if (name === 'img') {
+
+      if(name === 'img') {
         const imgClasses: string[] = attribs.class
           ? attribs.class.split(' ')
           : []
-        if (attribs['data-tex']) {
+
+        if(attribs['data-tex']) {
           const formula = attribs['alt'].slice(1, attribs['alt'].length - 1)
+
           return (
             <MathJaxNode inline={attribs['data-tex'] === 'inline'}>
-              {formula}
+              { formula }
             </MathJaxNode>
           )
-        } else if (imgClasses.some((e) => e === 'formula')) {
+        }
+        else 
+        if(imgClasses.some((e) => e === 'formula')) {
           const formula = attribs.source
+
           return (
-            <MathJaxNode inline={imgClasses.some((e) => e === 'inline')}>
-              {formula}
+            <MathJaxNode inline ={ imgClasses.some((e) => e === 'inline') }>
+              { formula }
             </MathJaxNode>
           )
         }
@@ -329,34 +363,35 @@ const FormattedText: React.FC<{
           height: attribs['data-height'] || attribs.height,
         }
 		
-        return (
-		  disableImage ? <></> : 
+        return ( 
           <LazyLoadImage
-            disableZoom={disableImageZoom}
-            placeholderSrc={attribs.src}
+            disableZoom ={ disableImageZoom }
+            placeholderSrc ={ attribs.src }
             // First try to load src from 'data-src' attribute
             // If not found, then use default 'src' attribute
-            src={attribs['data-src'] || attribs.src}
-            alt={attribs.alt || 'Изображение не загружено'}
-            align={attribs.align}
-            style={imgStyles}
-            className={classes.img}
+            src ={ attribs['data-src'] || attribs.src }
+            alt ={ attribs.alt || 'Изображение не загружено' }
+            align ={ attribs.align }
+            style ={ imgStyles }
+            className ={classes.img }
           />
         )
       }
-      if (name === 'div' && attribs.class === 'tm-iframe_temp') {
+
+      if(name === 'div' && attribs.class === 'tm-iframe_temp') {
         return (
           <Iframe
-            frameBorder={0}
-            allowFullScreen={true}
-            className={classes.iframe}
-            url={attribs['data-src']}
-            height={iframeHeights[attribs.id]?.toString() || 'auto'}
-            id={attribs.id}
+            frameBorder ={ 0 }
+            allowFullScreen ={ true }
+            className ={ classes.iframe }
+            url ={ attribs['data-src'] }
+            height ={ iframeHeights[attribs.id]?.toString() || 'auto' }
+            id ={ attribs.id }
           ></Iframe>
         )
       }
-      if (name === 'div' && attribs.class === 'spoiler') {
+
+      if(name === 'div' && attribs.class === 'spoiler') {
         const title: string = children.find(
           (e: { attribs: { class: string } }) =>
             e.attribs && e.attribs.class === 'spoiler_title'
@@ -366,57 +401,72 @@ const FormattedText: React.FC<{
             e.attribs && e.attribs.class === 'spoiler_text'
         ).children
 
-        return <Spoiler title={title}>{domToReact(data, options)}</Spoiler>
+        return (
+          <Spoiler title ={ title }>
+            { domToReact(data, options) }
+          </Spoiler>
+        )
       }
-      if (name === 'details' && attribs.class === 'spoiler') {
+
+      if(name === 'details' && attribs.class === 'spoiler') {
+
         const title: string = children.find(
           (e: { name: string }) => e.name === 'summary'
         ).children[0]?.data
+
         const data = children.find(
           (e: { attribs: { class: string } }) =>
             e.attribs && e.attribs.class === 'spoiler__content'
         ).children
 
-        return <Details title={title}>{domToReact(data, options)}</Details>
-      }
-      if (name === 'a' && attribs?.href?.startsWith('#')) {
-        const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (
-          e
-        ) => {
-          e.preventDefault()
-          const el =
-            document.getElementById(attribs.href.slice(1)) ||
-            document.getElementsByName(attribs.href.slice(1))[0]
-          const yOffset = -APP_BAR_HEIGHT
-          const y =
-            (el?.getBoundingClientRect()?.top || 0) +
-            window.pageYOffset +
-            yOffset
-          window.scrollTo({ top: y, behavior: 'smooth' })
-        }
         return (
-          <a onClick={handleLinkClick} {...attribs}>
-            {domToReact(children, options)}
+          <Details title={title}>
+            { domToReact(data, options) }
+          </Details>
+        )
+      }
+
+      if(name === 'a' && attribs?.href?.startsWith('#')) {
+        const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+          e.preventDefault();
+          const el = document.getElementById(attribs.href.slice(1)) 
+            || document.getElementsByName(attribs.href.slice(1))[0];
+
+          const yOffset = (-APP_BAR_HEIGHT);
+          const y = (el?.getBoundingClientRect()?.top || 0)
+            + window.pageYOffset
+            + yOffset;
+
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+
+        return (
+          <a onClick ={ handleLinkClick } {...attribs}>
+            { domToReact(children, options) }
           </a>
         )
       }
-      if (name === 'a' && shouldChangeLinks) {
-        const formattedLink = formatLink(attribs.href)
-        if (formattedLink)
+
+      if(name === 'a' && shouldChangeLinks) {
+        const formattedLink = formatLink(attribs.href);
+
+        if(formattedLink)
           return (
-            <Link to={formattedLink as string}>
-              {domToReact(children, options)}
+            <Link to ={ formattedLink as string }>
+              { domToReact(children, options) }
             </Link>
           )
       }
-      if (name === 'abbr') {
+
+      if(name === 'abbr') {
+
         return (
           <Tooltip
-            title={attribs.title}
-            placement="bottom"
-            className={classes.abbr}
+            title ={ attribs.title }
+            placement ="bottom"
+            className ={ classes.abbr }
           >
-            <span>{domToReact(children, options)}</span>
+            <span>{ domToReact(children, options) }</span>
           </Tooltip>
         )
       }
@@ -431,16 +481,47 @@ const FormattedText: React.FC<{
           [e.data.id]: e.data.height || 'auto',
         }))
     }
-    window.addEventListener('message', handler)
+
+    window.addEventListener('message', handler);
+
     return () => {
       // Remove listener on cleanup
-      window.removeEventListener('message', handler)
+      window.removeEventListener('message', handler);
     }
+
   }, [])
+
+  let filteredHtml =html;
+  
+  if(filter) {
+    // remove all <img> tags
+    if(filter.removeImages)
+      filteredHtml =filteredHtml.replace(/<img[^>]*>/g, '')
+    // remove recursive all empty tags
+    if(filter.removeEmptyTags) {
+      let replaced =1;
+
+      while(replaced--)
+        filteredHtml =filteredHtml.replace(/<(\w+)(?:\s+[^>]*)?>\s*<\/\1>/g, () => {
+          replaced =1; 
+          return '';
+        });
+    }
+    // remove <br> tags and whitespace characters - before of html.
+    if(filter.cleanBeforeHtml)
+      filteredHtml =filteredHtml.replace(/^(?:\s*<br\s*\/?>)*\s*/gi, '')
+    // limit <br> sequence
+    if(filter.limitBR !== undefined)
+      filteredHtml = filteredHtml.replace(
+        new RegExp(`(<br\\s*/?>\\s*){${ filter.limitBR + 1 },}`, 'gi')
+        , '<br>'.repeat(filter.limitBR));
+  }
+
+  const reactObjectHTML = parse(filteredHtml || '', options) // [sync-function]
 
   return (
     <div {...props} className={classes.text + ' ' + className}>
-      {parse(componentChildren || '', options)}
+      { reactObjectHTML }
     </div>
   )
 }

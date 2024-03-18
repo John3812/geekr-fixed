@@ -41,7 +41,7 @@ export const DRAWER_WIDTH = 296
 export const THREAD_LEVEL = 7
 
 export const POST_IMAGE_HEIGHT_MAX = 430
-export const POST_IMAGE_MARGIN_BOTTOM = 30
+export const POST_IMAGE_MARGIN_BOTTOM = 26
 export const MAIN_BLOCK_MARGIN_LEFT = (-10)
 export const MAIN_BLOCK_MARGIN_RIGHT = 20
 
