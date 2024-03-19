@@ -288,6 +288,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   preferredDarkTheme: 'dark',
   preferredLightTheme: 'light',
   autoChangeTheme: true,
+  styleCodeHighlight: 'vscDarkPlus',
   cookiesPreferences: {
     disableCookies: false,
   },

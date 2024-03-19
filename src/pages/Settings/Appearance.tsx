@@ -4,6 +4,9 @@ import OutsidePage from 'src/components/blocks/OutsidePage'
 import { useDispatch } from 'react-redux'
 import { setSettings } from 'src/store/actions/settings'
 import { useSelector } from 'src/hooks'
+import * as prismStyles from 'react-syntax-highlighter/dist/esm/styles/prism';
+const availableStyles = Object.keys(prismStyles);
+
 import {
   BACKGROUND_COLORS_DEFAULT,
   BACKGROUND_COLORS_PAPER,
@@ -23,6 +26,8 @@ import {
   GridSize,
   ButtonBase,
   FormControl,
+  InputLabel,
+  NativeSelect,
   darken,
   lighten,
   ListItem,
@@ -325,7 +330,8 @@ const ThemeCard = ({ theme }: { theme: CustomTheme }) => {
   const isCurrent = themeType === theme.type
   const ref = useRef<HTMLDivElement>(null)
   const changeTheme: React.MouseEventHandler<HTMLButtonElement> = (_event) => {
-    if (!isCurrent) dispatch(setSettings({ themeType: theme.type }))
+    if(!isCurrent)
+      dispatch(setSettings({ themeType: theme.type }))
   }
 
   // Scroll to the element on page first load
@@ -708,24 +714,29 @@ const Appearance = () => {
   const preferredDarkTheme = useSelector(
     (store) => store.settings.preferredDarkTheme
   )
-  const themeType = useSelector((state) => state.settings.themeType)
-  const isCustomThemeChosen = customThemes.some((e) => e.type === themeType)
+  const themeType = useSelector((state) => state.settings.themeType);
+  const styleCodeHighlight = useSelector(
+    (store) => store.settings.styleCodeHighlight
+  )
+  const isCustomThemeChosen = customThemes.some((e) => e.type === themeType);
   const preferredLightThemeName =
     preferredLightTheme in THEME_NAMES
       ? // TODO: fix types
     //@ts-expect-error
       THEME_NAMES[preferredLightTheme]
-      : customThemes.find((e) => e.type === preferredLightTheme)?.name
+      : customThemes.find((e) => e.type === preferredLightTheme)?.name;
   const preferredDarkThemeName =
     preferredDarkTheme in THEME_NAMES
       ? // TODO: fix types
     //@ts-expect-error
       THEME_NAMES[preferredDarkTheme]
-      : customThemes.find((e) => e.type === preferredDarkTheme)?.name
+      : customThemes.find((e) => e.type === preferredDarkTheme)?.name;
   const [isPreferredLightThemeDialogOpen, setPreferredLightThemeDialogOpen] =
-    useState(false)
+    useState(false);
   const [isPreferredDarkThemeDialogOpen, setPreferredDarkThemeDialogOpen] =
-    useState(false)
+    useState(false);
+  const [styleCodeHighlightValue, setStyleCodeHighlightValue] =
+    useState<string>(styleCodeHighlight);
 
   const handlePreferredLightThemeDialogClose = (value?: string) => {
     setPreferredLightThemeDialogOpen(false)
@@ -850,6 +861,26 @@ const Appearance = () => {
               primary={'Предпочитаемая темная тема'}
               secondary={preferredDarkThemeName}
             />
+          </ListItem>
+          <ListItem>
+            <FormControl>
+              <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                Подсветка синтаксиса
+              </InputLabel>
+              <NativeSelect
+                defaultValue ={ styleCodeHighlightValue }
+                onChange = {(e) => {
+                  setStyleCodeHighlightValue(e.target.value);
+                  dispatch(setSettings({ styleCodeHighlight: e.target.value }));
+                }}
+              >
+                {availableStyles.map(s => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </NativeSelect>
+            </FormControl>
           </ListItem>
           <ThemeSelectDialog
             keepMounted={false}

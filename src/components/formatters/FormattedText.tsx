@@ -7,8 +7,9 @@ import {
   Theme,
   rgbToHex,
 } from '@material-ui/core/styles'
-import SyntaxHighlighter from 'react-syntax-highlighter'
-import { monokai as monokaiStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
+import * as prismStyles from 'react-syntax-highlighter/dist/esm/styles/prism'
+//import { monokai as monokaiStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import Spoiler from '../blocks/Spoiler'
 import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser'
 import LazyLoadImage from '../blocks/LazyLoadImage'
@@ -283,6 +284,9 @@ const FormattedText: React.FC<{
   const shouldChangeLinks = useSelector(
     (store) => store.settings.readerSettings.changeLinks
   )
+  const styleCodeHighlight = useSelector(
+    (store) => store.settings.styleCodeHighlight
+  )
   let countBR =0; // Number of sequential line breaks.
   let countPrgph =0; // Number of paragraphs
   const options: HTMLReactParserOptions = {
@@ -324,7 +328,7 @@ const FormattedText: React.FC<{
 
         return (
           <SyntaxHighlighter
-            style = { monokaiStyle }
+            style = { prismStyles[styleCodeHighlight as keyof typeof prismStyles] || prismStyles.a11yDark }
             language = { language }
             className = { classes.syntaxHighlighter }
           >
